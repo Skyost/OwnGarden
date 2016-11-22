@@ -105,7 +105,7 @@ public class OwnGarden extends JavaPlugin {
 	}
 	
 	/**
-	 * Log a message to the console.
+	 * Logs a message to the console.
 	 * 
 	 * @param color The color (after the [plugin-name]).
 	 * @param message The message.
@@ -116,7 +116,7 @@ public class OwnGarden extends JavaPlugin {
 	}
 	
 	/**
-	 * Log a message to a CommandSender.
+	 * Logs a message to a CommandSender.
 	 * 
 	 * @param color The color (after the [plugin-name]).
 	 * @param message The message.
