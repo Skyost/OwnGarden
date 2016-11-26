@@ -14,6 +14,9 @@ public class PluginConfig extends Skyoconfig {
 	@ConfigOptions(name = "enable-updater")
 	public boolean enableUpdater = true;
 	
+	@ConfigOptions(name = "enable-metrics")
+	public boolean enableMetrics = true;
+	
 	@ConfigOptions(name = "sapling.oak")
 	public List<String> saplingOakSchematics = Arrays.asList("oak/1.schematic", "oak/2.schematic", "oak/3.schematic");
 	

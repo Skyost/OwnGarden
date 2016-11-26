@@ -1,7 +1,7 @@
 name: OwnGarden
 main: fr.skyost.owngarden.OwnGarden
 description: Grow custom trees !
-version: 0.1
+version: 0.1.1
 author: Skyost
 website: http://dev.bukkit.org/bukkit-plugins/owngarden/
 commands:

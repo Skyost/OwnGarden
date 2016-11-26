@@ -120,8 +120,7 @@ public class Schematic {
 					
 					final Location location = new Location(locWorld, xOrigin + x, locY + y, zOrigin + z);
 					final Block block = location.getBlock();
-					block.setType(material);
-					block.setData(data[index]);
+					block.setTypeIdAndData(material.getId(), data[index], true);
 					
 					locations.add(location);
 				}

@@ -20,6 +20,7 @@ import com.google.common.base.Joiner;
 
 import fr.skyost.owngarden.commands.OwnGardenCommand;
 import fr.skyost.owngarden.listeners.GlobalEvents;
+import fr.skyost.owngarden.utils.Metrics;
 import fr.skyost.owngarden.utils.Schematic;
 import fr.skyost.owngarden.utils.Skyupdater;
 
@@ -38,6 +39,9 @@ public class OwnGarden extends JavaPlugin {
 			
 			if(config.enableUpdater) {
 				new Skyupdater(this, 103296, this.getFile(), true, true);
+			}
+			if(config.enableMetrics) {
+				new Metrics(this);
 			}
 			log(ChatColor.GOLD, "Configuration loaded !");
 			
