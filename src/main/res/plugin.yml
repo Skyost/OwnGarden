@@ -1,0 +1,20 @@
+name: OwnGarden
+main: fr.skyost.owngarden.OwnGarden
+description: Grow custom trees !
+version: 0.2
+softdepend:
+ - WorldEdit
+author: Skyost
+website: http://dev.bukkit.org/bukkit-plugins/owngarden/
+api-version: 1.13
+commands:
+  owngarden:
+    description: Main command of OwnGarden.
+    aliases:
+     - own-garden
+    usage: /owngarden
+    permission: owngarden.command
+permissions:
+  owngarden.command:
+    default: op
+    description: Allows you to use /owngarden.
