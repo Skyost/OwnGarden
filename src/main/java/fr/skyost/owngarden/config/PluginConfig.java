@@ -1,11 +1,12 @@
 package fr.skyost.owngarden.config;
 
+import fr.skyost.owngarden.util.Skyoconfig;
+import org.bukkit.Material;
+
 import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-import fr.skyost.owngarden.util.Skyoconfig;
 
 /**
  * The plugin configuration.
@@ -24,6 +25,9 @@ public class PluginConfig extends Skyoconfig {
 
 	@ConfigOptions(name = "schematics.random-rotation")
 	public boolean schematicsRandomRotation = true;
+
+	@ConfigOptions(name = "schematics.check-height")
+	public boolean schematicsCheckHeight = false;
 	
 	@ConfigOptions(name = "sapling.oak")
 	public List<String> saplingOakSchematics = Arrays.asList("oak/1.schematic", "oak/2.schematic", "oak/3.schematic");
@@ -48,7 +52,7 @@ public class PluginConfig extends Skyoconfig {
 
 	@ConfigOptions(name = "mushroom.red")
 	public List<String> mushroomRedSchematics = Arrays.asList("red_mushroom/1.schem", "red_mushroom/2.schem", "red_mushroom/3.schem");
-
+	
 	/**
 	 * Creates a new plugin config instance.
 	 *
@@ -59,6 +63,44 @@ public class PluginConfig extends Skyoconfig {
 		super(new File(dataFolder, "config.yml"), Collections.singletonList("OwnGarden Configuration File"));
 		
 		schematicsDirectory = new File(dataFolder, "schematics/").getPath();
+	}
+
+	/**
+	 * Returns the schematics list which corresponds to the specified material (sapling / log).
+	 * 
+	 * @param material The material.
+	 * 
+	 * @return The corresponding list.
+	 */
+	
+	public List<String> getSchematics(final Material material) {
+		switch(material) {
+		case OAK_SAPLING: // Oak
+		case OAK_LOG:
+			return saplingOakSchematics;
+		case SPRUCE_SAPLING: // Spruce
+		case SPRUCE_LOG:
+			return saplingSpruceSchematics;
+		case BIRCH_SAPLING: // Birch
+		case BIRCH_LOG:
+			return saplingBirchSchematics;
+		case JUNGLE_SAPLING: // Jungle
+		case JUNGLE_LOG:
+			return saplingJungleSchematics;
+		case ACACIA_SAPLING: // Acacia
+		case ACACIA_LOG:
+			return saplingAcaciaSchematics;
+		case DARK_OAK_SAPLING: // Dark Oak
+		case DARK_OAK_LOG:
+			return saplingDarkOakSchematics;
+		case RED_MUSHROOM: // Red mushroom
+		case MUSHROOM_STEM:
+			return mushroomRedSchematics;
+		case BROWN_MUSHROOM: // Brown mushroom
+			return mushroomBrownSchematics;
+		}
+
+		return null;
 	}
 	
 }

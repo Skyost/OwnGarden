@@ -1,7 +1,7 @@
 package fr.skyost.owngarden.command;
 
 import com.google.common.base.Joiner;
-
+import fr.skyost.owngarden.OwnGarden;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -10,8 +10,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.util.ChatPaginator;
-
-import fr.skyost.owngarden.OwnGarden;
 
 /**
  * The /owngarden command.
@@ -38,7 +36,7 @@ public class OwnGardenCommand implements CommandExecutor {
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command command, final String label, String[] args) {
 		if(!sender.hasPermission("owngarden.command")) {
-			OwnGarden.log(ChatColor.RED, "You do not have the permission to execute this command.", sender);
+			plugin.log(ChatColor.RED, "You do not have the permission to execute this command.", sender);
 			return true;
 		}
 		

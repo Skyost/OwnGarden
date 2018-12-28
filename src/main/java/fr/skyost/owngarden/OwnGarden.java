@@ -1,7 +1,11 @@
 package fr.skyost.owngarden;
 
 import com.google.common.base.Joiner;
-
+import fr.skyost.owngarden.command.OwnGardenCommand;
+import fr.skyost.owngarden.config.PluginConfig;
+import fr.skyost.owngarden.listener.GlobalEventsListener;
+import fr.skyost.owngarden.util.Skyupdater;
+import fr.skyost.owngarden.worldedit.WorldEditOperations;
 import org.bstats.bukkit.MetricsLite;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -11,12 +15,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.zeroturnaround.zip.ZipUtil;
 
 import java.io.File;
-
-import fr.skyost.owngarden.command.OwnGardenCommand;
-import fr.skyost.owngarden.config.PluginConfig;
-import fr.skyost.owngarden.listener.GlobalEvents;
-import fr.skyost.owngarden.util.Skyupdater;
-import fr.skyost.owngarden.worldedit.WorldEditOperations;
 
 /**
  * The OwnGarden plugin class.
@@ -106,8 +104,8 @@ public class OwnGarden extends JavaPlugin {
 			
 			/* REGISTERING EVENTS : */
 			
-			Bukkit.getPluginManager().registerEvents(new GlobalEvents(this), this);
-			
+			Bukkit.getPluginManager().registerEvents(new GlobalEventsListener(this), this);
+
 			/* REGISTERING COMMANDS : */
 			
 			this.getCommand("owngarden").setExecutor(new OwnGardenCommand(this));
@@ -130,28 +128,15 @@ public class OwnGarden extends JavaPlugin {
 	public PluginConfig getPluginConfig() {
 		return config;
 	}
-	
+
 	/**
-	 * Logs a message to the console.
-	 * 
-	 * @param color The color (after the [plugin-name]).
-	 * @param message The message.
+	 * Returns the available WorldEdit operations.
+	 *
+	 * @return The available WorldEdit operations.
 	 */
-	
-	public static void log(final ChatColor color, final String message) {
-		log(color, message, Bukkit.getConsoleSender());
-	}
-	
-	/**
-	 * Logs a message to a CommandSender.
-	 * 
-	 * @param color The color (after the [plugin-name]).
-	 * @param message The message.
-	 * @param sender The sender.
-	 */
-	
-	public static void log(final ChatColor color, final String message, final CommandSender sender) {
-		sender.sendMessage("[" + Bukkit.getPluginManager().getPlugin("OwnGarden").getName() + "] " + color + message);
+
+	public WorldEditOperations getWorldEditOperations() {
+		return worldEditOperations;
 	}
 	
 	/**
@@ -165,13 +150,26 @@ public class OwnGarden extends JavaPlugin {
 	}
 
 	/**
-	 * Returns the available WorldEdit operations.
+	 * Logs a message to the console.
 	 *
-	 * @return The available WorldEdit operations.
+	 * @param color The color (after the [plugin-name]).
+	 * @param message The message.
 	 */
 
-	public WorldEditOperations getWorldEditOperations() {
-		return worldEditOperations;
+	public void log(final ChatColor color, final String message) {
+		log(color, message, Bukkit.getConsoleSender());
+	}
+
+	/**
+	 * Logs a message to a CommandSender.
+	 *
+	 * @param color The color (after the [plugin-name]).
+	 * @param message The message.
+	 * @param sender The sender.
+	 */
+
+	public void log(final ChatColor color, final String message, final CommandSender sender) {
+		sender.sendMessage("[" + getName() + "] " + color + message);
 	}
 	
 }
