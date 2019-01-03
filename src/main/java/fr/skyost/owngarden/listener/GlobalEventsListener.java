@@ -56,7 +56,7 @@ public class GlobalEventsListener implements Listener {
 				}
 			}
 
-			event.getBlocks().clear();
+			//event.getBlocks().clear();
 			event.setCancelled(true);
 		}
 	}

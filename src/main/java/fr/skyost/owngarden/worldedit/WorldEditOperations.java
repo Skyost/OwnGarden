@@ -1,10 +1,12 @@
 package fr.skyost.owngarden.worldedit;
 
+import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitWorld;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardReader;
+import com.sk89q.worldedit.function.operation.Operation;
 import com.sk89q.worldedit.function.operation.Operations;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.math.transform.AffineTransform;
@@ -154,12 +156,16 @@ public class WorldEditOperations {
 			}
 
 			holder.getClipboard().setOrigin(BlockVector3.at(dimensions.getX() / 2, 0, dimensions.getZ() / 2));
-			Operations.completeLegacy(holder
-					.createPaste(WorldEdit.getInstance().getEditSessionFactory().getEditSession(new BukkitWorld(location.getWorld()), WorldEdit.getInstance().getConfiguration().maxChangeLimit))
-					.to(BlockVector3.at(location.getX(), location.getY(), location.getZ()))
+
+			final EditSession session = WorldEdit.getInstance().getEditSessionFactory().getEditSession(new BukkitWorld(location.getWorld()), -1);
+			final Operation operation = holder
+					.createPaste(session)
+					.to(BlockVector3.at(location.getBlockX(), location.getBlockY(), location.getBlockZ()))
 					.ignoreAirBlocks(true)
-					.build()
-			);
+					.build();
+			Operations.completeLegacy(operation);
+
+			session.flushSession();
 			return true;
 		}
 		catch(final Exception ex) {

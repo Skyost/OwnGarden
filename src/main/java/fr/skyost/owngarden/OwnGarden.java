@@ -55,11 +55,11 @@ public class OwnGarden extends JavaPlugin {
 			/* CONFIGURATION : */
 			
 			log(ChatColor.GOLD, "Loading the configuration...");
-			config = new PluginConfig(this.getDataFolder());
+			config = new PluginConfig(getDataFolder());
 			config.load();
 			
 			if(config.enableUpdater) {
-				new Skyupdater(this, 103296, this.getFile(), true, true);
+				new Skyupdater(this, 103296, getFile(), true, true);
 			}
 			if(config.enableMetrics) {
 				new MetricsLite(this);
@@ -108,10 +108,10 @@ public class OwnGarden extends JavaPlugin {
 
 			/* REGISTERING COMMANDS : */
 			
-			this.getCommand("owngarden").setExecutor(new OwnGardenCommand(this));
+			getCommand("owngarden").setExecutor(new OwnGardenCommand(this));
 			
-			final PluginDescriptionFile description = this.getDescription();
-			log(ChatColor.RESET, "Enabled " + ChatColor.GREEN + this.getName() + " v" + description.getVersion() + ChatColor.GOLD + " by " + Joiner.on(' ').join(description.getAuthors()) + ChatColor.RESET + " !");
+			final PluginDescriptionFile description = getDescription();
+			log(ChatColor.RESET, "Enabled " + ChatColor.GREEN + getName() + " v" + description.getVersion() + ChatColor.GOLD + " by " + Joiner.on(' ').join(description.getAuthors()) + ChatColor.RESET + " !");
 		}
 		catch(final Exception ex) {
 			log(ChatColor.RED, "Unable to start the plugin !");
