@@ -28,6 +28,9 @@ public class PluginConfig extends Skyoconfig {
 
 	@ConfigOptions(name = "schematics.check-height")
 	public boolean schematicsCheckHeight = false;
+
+	@ConfigOptions(name = "schematics.remove-worldedit-metadata")
+	public boolean schematicsRemoveWorldEditMetaData = true;
 	
 	@ConfigOptions(name = "sapling.oak")
 	public List<String> saplingOakSchematics = Arrays.asList("oak/1.schematic", "oak/2.schematic", "oak/3.schematic");

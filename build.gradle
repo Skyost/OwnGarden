@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'fr.skyost'
-version = '0.2.1'
+version = '0.2.2'
 
 sourceCompatibility = 1.8
 
@@ -13,19 +13,19 @@ repositories {
     mavenCentral()
     maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
     maven { url = 'http://repo.bstats.org/content/repositories/releases/' }
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
     compileOnly fileTree(dir: 'libs', include: ['*.jar'])
 
     compileOnly 'org.bukkit:bukkit:1.13.2-R0.1-SNAPSHOT'
-    compile 'org.bstats:bstats-bukkit-lite:1.2'
-    compile 'org.zeroturnaround:zt-zip:1.13'
+    implementation 'org.bstats:bstats-bukkit-lite:1.2'
+    implementation 'org.zeroturnaround:zt-zip:1.13'
 }
 
 shadowJar {
     destinationDir = new File(rootProject.projectDir, 'build/release/')
-    configurations = [project.configurations.compile]
     mergeServiceFiles()
     relocate 'org.bstats.bukkit', 'fr.skyost.owngarden.util.bstats'
     from('src/main/res') {

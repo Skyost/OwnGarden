@@ -11,21 +11,26 @@ The custom schematic is randomly picked from a list (where you can add, remove o
 ## Configuration
 Your server must be stopped before editing **config.yml**.
 
-| KEY        |          | POSSIBLE VALUES   | DESCRIPTION                                                                                            |
-|------------|----------|-------------------|--------------------------------------------------------------------------------------------------------|
-| enable     |          |                   |                                                                                                        |
-|            | updater  | `true` or `false` | Enables [Skyupdater](https://www.skyost.eu/skyupdater.txt).                                            |
-|            | metrics  | `true` or `false` | Enables [bStats](https://bstats.org/).                                                                 |
-| schematics |          |                   |                                                                                                        |
-|            | oak      | list of files     | [Oak trees](https://minecraft.gamepedia.com/Tree#Oak_tree) schematics.                                 |
-|            | spruce   | list of files     | [Spruce trees](https://minecraft.gamepedia.com/Tree#Spruce_tree) schematics.                           |
-|            | birch    | list of files     | [Birch trees](https://minecraft.gamepedia.com/Tree#Birch_tree) schematics.                             |
-|            | jungle   | list of files     | [Jungle trees](https://minecraft.gamepedia.com/Tree#Jungle_tree) schematics.                           |
-|            | acacia   | list of files     | [Acacia trees](https://minecraft.gamepedia.com/Tree#Acacia_tree) schematics.                           |
-|            | dark-oak | list of files     | [Dark oak trees](https://minecraft.gamepedia.com/Tree#Dark_oak_tree) schematics.                       |
-| mushroom   |          |                   |                                                                                                        |
-|            | brown    | list of files     | [Huge brown mushrooms](https://minecraft.gamepedia.com/Huge_mushroom#Huge_brown_mushrooms) schematics. |
-|            | red      | list of files     | [Huge red mushrooms](https://minecraft.gamepedia.com/Huge_mushroom#Huge_red_mushrooms) schematics.     |
+| KEY        |                           | POSSIBLE VALUES   | DESCRIPTION                                                                                            |
+|------------|---------------------------|-------------------|--------------------------------------------------------------------------------------------------------|
+| enable     |                           |                   |                                                                                                        |
+|            | updater                   | `true` or `false` | Enables [Skyupdater](https://www.skyost.eu/skyupdater.txt).                                            |
+|            | metrics                   | `true` or `false` | Enables [bStats](https://bstats.org/).                                                                 |
+| schematics |                           |                   |                                                                                                        |
+|            | directory                 | directory         | The root directory of where to pick schematics.                                                        |
+|            | random-rotation           | `true` or `false` | Whether schematics should be randomly rotated.                                                         |
+|            | check-height              | `true` or `false` | _(Experimental)_ Whether the plugin should check for a floor before pasting a schematic.               |
+|            | remove-worldedit-metadata | `true` or `false` | Whether the plugin should try to edit the schematics and remove all WorldEdit metadata (at startup).   |
+| sapling    |                           |                   |                                                                                                        |
+|            | oak                       | list of files     | [Oak trees](https://minecraft.gamepedia.com/Tree#Oak_tree) schematics.                                 |
+|            | spruce                    | list of files     | [Spruce trees](https://minecraft.gamepedia.com/Tree#Spruce_tree) schematics.                           |
+|            | birch                     | list of files     | [Birch trees](https://minecraft.gamepedia.com/Tree#Birch_tree) schematics.                             |
+|            | jungle                    | list of files     | [Jungle trees](https://minecraft.gamepedia.com/Tree#Jungle_tree) schematics.                           |
+|            | acacia                    | list of files     | [Acacia trees](https://minecraft.gamepedia.com/Tree#Acacia_tree) schematics.                           |
+|            | dark-oak                  | list of files     | [Dark oak trees](https://minecraft.gamepedia.com/Tree#Dark_oak_tree) schematics.                       |
+| mushroom   |                           |                   |                                                                                                        |
+|            | brown                     | list of files     | [Huge brown mushrooms](https://minecraft.gamepedia.com/Huge_mushroom#Huge_brown_mushrooms) schematics. |
+|            | red                       | list of files     | [Huge red mushrooms](https://minecraft.gamepedia.com/Huge_mushroom#Huge_red_mushrooms) schematics.     |
 
 If you want to disable the plugin for a tree type, just put the blank list `[]` instead of a list of files.
 

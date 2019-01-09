@@ -21,6 +21,17 @@ import static org.bukkit.Material.DARK_OAK_SAPLING;
 
 public class GlobalEventsListener implements Listener {
 
+	private static final List<BlockFace> FACES = Arrays.asList(
+			BlockFace.NORTH,
+			BlockFace.NORTH_EAST,
+			BlockFace.EAST,
+			BlockFace.SOUTH_EAST,
+			BlockFace.SOUTH,
+			BlockFace.SOUTH_WEST,
+			BlockFace.WEST,
+			BlockFace.NORTH_WEST
+	);
+
 	/**
 	 * The plugin instance.
 	 */
@@ -48,7 +59,7 @@ public class GlobalEventsListener implements Listener {
 		if(plugin.getWorldEditOperations().growTree(schematics, location)) {
 			if(schematics == plugin.getPluginConfig().saplingDarkOakSchematics) {
 				final Block current = location.getBlock();
-				for(final BlockFace blockFace : Arrays.asList(BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST)) {
+				for(final BlockFace blockFace : FACES) {
 					final Block relative = current.getRelative(blockFace);
 					if(relative.getType() == DARK_OAK_SAPLING) {
 						relative.setType(Material.AIR);

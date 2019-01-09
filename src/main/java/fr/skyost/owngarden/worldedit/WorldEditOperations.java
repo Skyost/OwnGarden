@@ -1,8 +1,13 @@
 package fr.skyost.owngarden.worldedit;
 
+import com.sk89q.jnbt.CompoundTag;
+import com.sk89q.jnbt.NBTInputStream;
+import com.sk89q.jnbt.NBTOutputStream;
+import com.sk89q.jnbt.Tag;
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitWorld;
+import com.sk89q.worldedit.extent.clipboard.io.BuiltInClipboardFormat;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardReader;
@@ -17,9 +22,9 @@ import fr.skyost.owngarden.config.PluginConfig;
 import org.bukkit.*;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 /**
  * Represents available WorldEdit operations.
@@ -81,16 +86,41 @@ public class WorldEditOperations {
 		schematics.addAll(config.saplingAcaciaSchematics);
 		schematics.addAll(config.saplingDarkOakSchematics);
 
+		final boolean removeWorldEditMetaData = plugin.getPluginConfig().schematicsRemoveWorldEditMetaData;
+
 		final List<String> invalidSchematics = new ArrayList<>();
 		for(final String schematic : schematics) {
 			try {
 				loadSchematic(schematic);
+
+				if(!removeWorldEditMetaData) {
+					continue;
+				}
+
+				final File file = getFile(schematic);
+				final ClipboardFormat format = ClipboardFormats.findByFile(file);
+				if(format != null) {
+					removeWorldEditMetaData(format, file);
+				}
 			}
 			catch(final Exception ex) {
+				ex.printStackTrace();
 				invalidSchematics.add(schematic);
 			}
 		}
 		return invalidSchematics.toArray(new String[0]);
+	}
+
+	/**
+	 * Returns the file associated with the given schematic.
+	 *
+	 * @param schematic The schematic.
+	 *
+	 * @return The file.
+	 */
+
+	private File getFile(final String schematic) {
+		return new File(plugin.getPluginConfig().schematicsDirectory, schematic);
 	}
 
 	/**
@@ -104,7 +134,7 @@ public class WorldEditOperations {
 	 */
 
 	public ClipboardHolder loadSchematic(final String schematic) throws IOException {
-		final File file = new File(plugin.getPluginConfig().schematicsDirectory, schematic);
+		final File file = getFile(schematic);
 		if(!file.exists()) {
 			throw new FileNotFoundException("Schematic not found : " + schematic + ".");
 		}
@@ -115,11 +145,21 @@ public class WorldEditOperations {
 		}
 
 		final Closer closer = Closer.create();
-		final FileInputStream fileInputStream = closer.register(new FileInputStream(file));
-		final BufferedInputStream bufferedInputStream = closer.register(new BufferedInputStream(fileInputStream));
-		final ClipboardReader reader = closer.register(format.getReader(bufferedInputStream));
+		try {
+			final FileInputStream fileInputStream = closer.register(new FileInputStream(file));
+			final BufferedInputStream bufferedInputStream = closer.register(new BufferedInputStream(fileInputStream));
+			final ClipboardReader reader = closer.register(format.getReader(bufferedInputStream));
 
-		return new ClipboardHolder(reader.read());
+			return new ClipboardHolder(reader.read());
+		}
+		catch(final Exception ex) {
+			closer.rethrow(ex);
+		}
+		finally {
+			closer.close();
+		}
+
+		return null;
 	}
 
 	/**
@@ -201,6 +241,48 @@ public class WorldEditOperations {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Removes all WorldEdit metadata (if needed).
+	 *
+	 * @param format The clipboard format.
+	 * @param file The file.
+	 *
+	 * @throws IOException If any I/O exception occurs.
+	 */
+
+	private void removeWorldEditMetaData(final ClipboardFormat format, final File file) throws IOException {
+		final NBTInputStream input = new NBTInputStream(new GZIPInputStream(new FileInputStream(file)));
+		CompoundTag root = (CompoundTag)input.readNamedTag().getTag();
+		CompoundTag target = root;
+
+		final boolean isSponge = format.getPrimaryFileExtension().equals(BuiltInClipboardFormat.SPONGE_SCHEMATIC.getPrimaryFileExtension());
+		if(isSponge) {
+			target = (CompoundTag)target.getValue().getOrDefault("Metadata", new CompoundTag(new HashMap<>()));
+		}
+
+		final Map<String, Tag> value = new HashMap<>(target.getValue());
+		value.remove("WEOriginX");
+		value.remove("WEOriginY");
+		value.remove("WEOriginZ");
+		value.remove("WEOffsetX");
+		value.remove("WEOffsetY");
+		value.remove("WEOffsetZ");
+		target = target.setValue(value);
+
+		if(isSponge) {
+			final Map<String, Tag> rootValue = new HashMap<>(root.getValue());
+			rootValue.put("Metadata", target);
+			root = root.setValue(rootValue);
+		}
+		else {
+			root = target;
+		}
+
+		final NBTOutputStream output = new NBTOutputStream(new GZIPOutputStream(new FileOutputStream(file)));
+		output.writeNamedTag("Schematic", root);
+		output.close();
 	}
 
 	/**

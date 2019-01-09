@@ -1,7 +1,7 @@
 name: OwnGarden
 main: fr.skyost.owngarden.OwnGarden
 description: Grow custom trees !
-version: 0.2.1
+version: 0.2.2
 softdepend:
  - WorldEdit
 author: Skyost
