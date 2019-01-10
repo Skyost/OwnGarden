@@ -1,9 +1,7 @@
 package fr.skyost.owngarden.worldedit;
 
-import com.sk89q.jnbt.CompoundTag;
-import com.sk89q.jnbt.NBTInputStream;
-import com.sk89q.jnbt.NBTOutputStream;
 import com.sk89q.jnbt.Tag;
+import com.sk89q.jnbt.*;
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitWorld;
@@ -274,6 +272,7 @@ public class WorldEditOperations {
 		if(isSponge) {
 			final Map<String, Tag> rootValue = new HashMap<>(root.getValue());
 			rootValue.put("Metadata", target);
+			rootValue.put("Offset", new IntArrayTag(new int[]{0, 0, 0}));
 			root = root.setValue(rootValue);
 		}
 		else {
