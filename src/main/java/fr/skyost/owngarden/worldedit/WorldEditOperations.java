@@ -34,7 +34,7 @@ public class WorldEditOperations {
 	 * Accepted WorldEdit versions.
 	 */
 
-	public static final String[] WORLDEDIT_VERSIONS = new String[]{"7.0"};
+	public static final String[] WORLDEDIT_VERSIONS = new String[]{"7.0", "7.1"};
 
 	/**
 	 * The plugin instance.
