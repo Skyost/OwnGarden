@@ -1,22 +1,15 @@
 package fr.skyost.owngarden.util;
 
+import com.eclipsesource.json.Json;
+import com.eclipsesource.json.JsonArray;
+import com.eclipsesource.json.JsonObject;
 import com.google.common.base.Joiner;
-
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.logging.Level;
@@ -26,6 +19,8 @@ import java.util.regex.Pattern;
  * A simple auto-updater.
  * <br>Please follow this link to read more about checking for updates in your plugin : https://www.skyost.eu/Skyupdater.txt.
  * <br><br>Thanks to Gravity for his updater (this file uses some parts of his code) !
+ *
+ * Please note that it needs minimal-json to work.
  *
  * @author <a href="https://www.skyost.eu">Skyost</a>.
  */
@@ -43,11 +38,11 @@ public class Skyupdater {
 	private final YamlConfiguration config = new YamlConfiguration();
 
 	private Result result = Result.SUCCESS;
-	private JSONObject updateData;
+	private JsonObject updateData;
 	private String response;
 	private Thread updaterThread;
 
-	private static final String SKYUPDATER_VERSION = "0.5.2";
+	private static final String SKYUPDATER_VERSION = "0.6";
 
 	/**
 	 * Represents the updater's result.
@@ -168,7 +163,7 @@ public class Skyupdater {
 		final StringBuilder header = new StringBuilder();
 		header.append("Skyupdater configuration - https://www.skyost.eu/Skyupdater.txt" + lineSeparator + lineSeparator);
 		header.append("What is Skyupdater ?" + lineSeparator);
-		header.append("Skyupdater is a simple updater created by Skyost (https://www.skyost.eu). It is used to auto-update Bukkit Plugins." + lineSeparator + lineSeparator);
+		header.append("Skyupdater is a simple updater created by Skyost (https://www.skyost.eu). It aims to auto-update Bukkit Plugins." + lineSeparator + lineSeparator);
 		header.append("What happens during the update process ?" + lineSeparator);
 		header.append("1. Connection to curseforge.com." + lineSeparator);
 		header.append("2. Plugin version compared against version on curseforge.com." + lineSeparator);
@@ -232,7 +227,7 @@ public class Skyupdater {
 
 	public final String getLatestFileInfo(final InfoType type) {
 		waitForThread();
-		return (String)updateData.get(type.getJSONKey());
+		return updateData.get(type.getJSONKey()).asString();
 	}
 
 	/**
@@ -241,7 +236,7 @@ public class Skyupdater {
 	 * @return A JSON object which contains every of the update process.
 	 */
 
-	public final JSONObject getLatestFileData() {
+	public final JsonObject getLatestFileData() {
 		waitForThread();
 		return updateData;
 	}
@@ -323,7 +318,7 @@ public class Skyupdater {
 	 * Gets the formatted name of a version.
 	 * <br>Used for the method <b>compareVersions(...)</b> of this class.
 	 *
-	 * @param version The version you want to format.
+	 * @param version The version you want to addLocation.
 	 * @param separator The separator between the numbers of this version.
 	 * @param maxWidth The max width of the formatted version.
 	 *
@@ -396,8 +391,8 @@ public class Skyupdater {
 				final String response = bufferedReader.readLine();
 
 				if(response != null && !response.equals("[]")) {
-					final JSONArray jsonArray = (JSONArray)JSONValue.parseWithException(response);
-					updateData = (JSONObject)jsonArray.get(jsonArray.size() - 1);
+					final JsonArray jsonArray = Json.parse(response).asArray();
+					updateData = jsonArray.get(jsonArray.size() - 1).asObject();
 
 					if(compareVersions(getLatestFileInfo(InfoType.FILE_TITLE).split("^v|[\\s_-]v")[1].split(" ")[0], plugin.getDescription().getVersion()) && getLatestFileInfo(InfoType.DOWNLOAD_URL).toLowerCase().endsWith(".jar")) {
 						result = Result.UPDATE_AVAILABLE;
